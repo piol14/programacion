@@ -14,6 +14,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class Tema8_ejercicio2 {
 
@@ -61,55 +63,79 @@ public class Tema8_ejercicio2 {
 		frame_1.setBounds(100, 100, 704, 483);
 		frame_1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame_1.getContentPane().setLayout(null);
-		JComboBox comboBox = new JComboBox();
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBounds(386, 100, 153, 24);
-		frame_1.getContentPane().add(comboBox_2);
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					String url = "jdbc:mysql://127.0.0.1:3307/provincias";
-					String user = "alumno";
-					String password = "alumno";
-					String nombre;
-					Connection con = DriverManager.getConnection(url, user, password);
-					Statement stmt = con.createStatement();
-					PreparedStatement sel_pstmt = con.prepareStatement("SELECT nomp FROM provincia WHERE comunidad_id=?");
-					sel_pstmt.setInt(1, 1);
-					ResultSet rs_sel = sel_pstmt.executeQuery();
-					 while(rs_sel.next())
-					 {
-					 nombre=rs_sel.getString("nomp");
-					 comboBox_2.addItem(nombre);
-					 }
-					 rs_sel.close();
-					 stmt.close();
-					 con.close();
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
-			}
-			}
-		});
+		JComboBox comboBoxCA = new JComboBox();
 		
-		comboBox.setBounds(84, 100, 165, 24);
-		frame_1.getContentPane().add(comboBox);
+		JComboBox comboBoxPO = new JComboBox();
+		comboBoxPO.setBounds(386, 100, 153, 24);
+		frame_1.getContentPane().add(comboBoxPO);
+		
+		JLabel lblProvincia = new JLabel("Provincia");
+		lblProvincia.setBounds(408, 73, 132, 15);
+		frame_1.getContentPane().add(lblProvincia);
+		
+		JLabel lblComunidadAutonoma = new JLabel("Comunidad autonoma");
+		lblComunidadAutonoma.setBounds(74, 73, 174, 15);
+		frame_1.getContentPane().add(lblComunidadAutonoma);
+		
+		comboBoxCA.setBounds(84, 100, 165, 24);
+		frame_1.getContentPane().add(comboBoxCA);
 		String url = "jdbc:mysql://127.0.0.1:3307/provincias";
 		String user = "alumno";
 		String password = "alumno";
 		
 		Scanner s= new Scanner(System.in);
 		
+		
+
+		comboBoxCA.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				try {
+					String url = "jdbc:mysql://127.0.0.1:3307/provincias";
+					String user = "alumno";
+					String password = "alumno";
+					String nombre;
+					Connection con = DriverManager.getConnection(url, user, password);
+					
+					PreparedStatement stmt = con.prepareStatement("SELECT * FROM provincia WHERE comunidad_idc=?");
+					stmt.setInt(1,  comboBoxCA.getSelectedIndex() + 1);
+					ResultSet rs = stmt.executeQuery();
+					comboBoxPO.removeAllItems();
+					
+					 while(rs.next())
+					 {
+					 nombre=rs.getString("nomp");
+					 comboBoxPO.addItem(nombre);
+					 }
+					 rs.close();
+					 stmt.close();
+				
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+			}
+		
+			
+		});
+		
+		
+			
+				
+		
+	
 		try {
 			String nombre;
 			Connection con = DriverManager.getConnection(url, user, password);
 			Statement stmt = con.createStatement();
 			 ResultSet rs = stmt.executeQuery("SELECT * FROM comunidad");
+			 
+				comboBoxCA.removeAllItems();
+				
 			 while(rs.next())
 			 {
 			 nombre=rs.getString("nomc");
-			 comboBox.addItem(nombre);
+			 comboBoxCA.addItem(nombre);
 			 }
 			 rs.close();
 			 stmt.close();
@@ -123,7 +149,7 @@ public class Tema8_ejercicio2 {
 		
 
 		
-		comboBox.setBounds(84, 100, 165, 24);
+		comboBoxCA.setBounds(84, 100, 165, 24);
 		
 		
 		
@@ -132,14 +158,6 @@ public class Tema8_ejercicio2 {
 		
 		
 	
-		JLabel lblProvincia = new JLabel("Provincia");
-		lblProvincia.setBounds(408, 73, 132, 15);
-		frame_1.getContentPane().add(lblProvincia);
-		
-		JLabel lblComunidadAutonoma = new JLabel("Comunidad autonoma");
-		lblComunidadAutonoma.setBounds(74, 73, 174, 15);
-		frame_1.getContentPane().add(lblComunidadAutonoma);
-		
 	
 	}
 	
