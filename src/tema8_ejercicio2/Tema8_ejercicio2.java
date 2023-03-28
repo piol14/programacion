@@ -94,7 +94,7 @@ public class Tema8_ejercicio2 {
 					String user = "alumno";
 					String password = "alumno";
 					String nombre;
-					Connection con = DriverManager.getConnection(url, user, password);
+					Connection con=ConnectionSingleton.getConnection();
 					
 					PreparedStatement stmt = con.prepareStatement("SELECT * FROM provincia WHERE comunidad_idc=?");
 					stmt.setInt(1,  comboBoxCA.getSelectedIndex() + 1);
@@ -126,7 +126,7 @@ public class Tema8_ejercicio2 {
 	
 		try {
 			String nombre;
-			Connection con = DriverManager.getConnection(url, user, password);
+			Connection con=ConnectionSingleton.getConnection();
 			Statement stmt = con.createStatement();
 			 ResultSet rs = stmt.executeQuery("SELECT * FROM comunidad");
 			 
